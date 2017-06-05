@@ -2,8 +2,7 @@ const jwt = require('jsonwebtoken');
 const uuid = require('uuid/v4');
 const User = require('../models/User');
 const {
-  LOGIN_SUCCESS,
-  SIGN_UP_SUCCESS,
+  SUCCESS,
   ERROR_VALIDATION_FAILED,
   ERROR_SOMETHING_BAD_HAPPEND,
   ERROR_INVALID_EMAIL_PASSWORD,
@@ -60,7 +59,7 @@ const login = (req, res) => {
       if (isMatch) {
         const token = generateToken(user);
         return res.send({
-          code: LOGIN_SUCCESS,
+          code: SUCCESS,
           message: 'Login success',
           token,
         });
@@ -125,7 +124,7 @@ const signup = (req, res) => {
 
       const token = generateToken(user);
       return res.send({
-        code: SIGN_UP_SUCCESS,
+        code: SUCCESS,
         message: 'Sign up success',
         token,
       });

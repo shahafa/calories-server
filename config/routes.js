@@ -1,14 +1,17 @@
 const chalk = require('chalk');
 const jwt = require('express-jwt');
-const userController = require('../controllers/user');
+const usersController = require('../controllers/users');
+const mealsController = require('../controllers/meals');
 
 const authenticate = jwt({ secret: process.env.JWT_SECRET });
 
 function routesConfig(app) {
-  app.get('/test', authenticate, (req, res) => { res.send('Hello World!'); });
+  app.post('/login', usersController.login);
+  app.post('/signup', usersController.signup);
 
-  app.post('/login', userController.login);
-  app.post('/signup', userController.signup);
+  app.get('/meals', authenticate, mealsController.getAll);
+  app.post('/meals', authenticate, mealsController.add);
+  app.delete('/meals/:id', authenticate, mealsController.deleteMeal);
 
   console.log('%s Routes configured successfully', chalk.green('✓'));
 }
