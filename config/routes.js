@@ -11,6 +11,7 @@ function routesConfig(app) {
 
   app.get('/meals', authenticate, mealsController.getAll);
   app.post('/meals', authenticate, mealsController.add);
+  app.put('/meals/:id', authenticate, mealsController.edit);
   app.delete('/meals/:id', authenticate, mealsController.deleteMeal);
 
   console.log('%s Routes configured successfully', chalk.green('✓'));
