@@ -8,6 +8,7 @@
     "no-console": "off",
     "consistent-return": "off",
     "no-shadow": "off",
-    "func-names": "off"
+    "func-names": "off",
+    "no-param-reassign": "off"
   }  
 }
