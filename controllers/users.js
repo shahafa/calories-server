@@ -121,9 +121,23 @@ const updateUsersRole = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    await User.delete(userId);
+
+    const users = await User.getUsers();
+    return res.send(successObject('', { data: { users } }));
+  } catch (err) {
+    return res.status(500).send(errorObject(ERROR_SOMETHING_BAD_HAPPEND, 'Something bad happened :(', err));
+  }
+};
+
 module.exports = {
   login,
   signup,
   getUsers,
   updateUsersRole,
+  deleteUser,
 };

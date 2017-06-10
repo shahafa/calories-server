@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt-nodejs');
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   id: { type: String, index: { unique: true } },
   email: { type: String, index: { unique: true } },
   password: String,
@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
 /**
  * Password hash middleware.
  */
-userSchema.pre('save', function save(next) {
+UserSchema.pre('save', function save(next) {
   const user = this;
 
   if (!user.isModified('password')) { return next(); }
@@ -32,13 +32,13 @@ userSchema.pre('save', function save(next) {
 /**
  * Helper method for validating user's password.
  */
-userSchema.methods.comparePassword = function comparePassword(candidatePassword, cb) {
+UserSchema.methods.comparePassword = function comparePassword(candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
     cb(err, isMatch);
   });
 };
 
-userSchema.statics.getUsers = async function () {
+UserSchema.statics.getUsers = async function () {
   const users = await this.find().exec();
   if (!users) {
     return false;
@@ -51,10 +51,20 @@ userSchema.statics.getUsers = async function () {
   }));
 };
 
-userSchema.statics.updateUserRole = async function (userId, role) {
+UserSchema.statics.updateUserRole = async function (userId, role) {
   await this.findOneAndUpdate({ id: userId }, { role });
 
   return true;
 };
 
-module.exports = mongoose.model('User', userSchema);
+UserSchema.statics.delete = async function (userId) {
+  const user = await this.findOne({ id: userId }).exec();
+  if (!user) {
+    return false;
+  }
+
+  await user.remove();
+  return true;
+};
+
+module.exports = mongoose.model('User', UserSchema);

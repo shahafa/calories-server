@@ -23,8 +23,8 @@ MealSchema.statics.add = async function (meal) {
 };
 
 MealSchema.statics.delete = async function (userId, mealId) {
-  const meal = await this.findOne({ id: mealId }).exec();
-  if (!meal || meal.userId !== userId) {
+  const meal = await this.findOne({ userId, id: mealId }).exec();
+  if (!meal) {
     return false;
   }
 
