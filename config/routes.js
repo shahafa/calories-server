@@ -9,6 +9,8 @@ const authenticate = jwt({ secret: process.env.JWT_SECRET });
 function routesConfig(app) {
   app.post('/login', usersController.login);
   app.post('/signup', usersController.signup);
+  app.get('/users', authenticate, usersController.getUsers);
+  app.put('/users', authenticate, usersController.updateUsersRole);
 
   app.get('/meals', authenticate, mealsController.getAll);
   app.post('/meals', authenticate, mealsController.add);

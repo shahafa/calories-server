@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const MealSchema = new mongoose.Schema({
-  id: { type: String, unique: true, index: true },
+  id: { type: String, index: { unique: true } },
   userId: { type: String, index: true },
   date: Date,
   meal: String,
@@ -29,6 +29,12 @@ MealSchema.statics.delete = async function (userId, mealId) {
   }
 
   await meal.remove();
+  return true;
+};
+
+MealSchema.statics.edit = async function (userId, meal) {
+  await this.findOneAndUpdate({ userId, id: meal.id }, meal);
+
   return true;
 };
 

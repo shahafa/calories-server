@@ -14,7 +14,7 @@ const getAll = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  req.assert('meal', 'Meal object is missing').notEmpty();
+  req.assert('meal', 'meal object is missing').notEmpty();
   const errors = req.validationErrors();
   if (errors) {
     return res.status(400).send(errorObject(ERROR_VALIDATION_FAILED, 'Validation Failed', errors));
@@ -33,7 +33,7 @@ const add = async (req, res) => {
 };
 
 const edit = async (req, res) => {
-  req.assert('meal', 'Meal object is missing').notEmpty();
+  req.assert('meal', 'meal object is missing').notEmpty();
   const errors = req.validationErrors();
   if (errors) {
     return res.status(400).send(errorObject(ERROR_VALIDATION_FAILED, 'Validation Failed', errors));
@@ -41,10 +41,7 @@ const edit = async (req, res) => {
 
   try {
     const userId = req.user.user.id;
-    await Meal.delete(userId, req.body.meal.id);
-
-    const meal = Object.assign({ userId }, req.body.meal);
-    await Meal.add(meal);
+    await Meal.edit(userId, req.body.meal);
 
     const meals = await Meal.getMeals(userId);
     return res.send(successObject('', { data: { meals } }));

@@ -13,12 +13,13 @@ const generateToken = user => jwt.sign({
   user: {
     id: user.id,
     email: user.email,
+    role: user.role,
   },
 }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
 const login = (req, res) => {
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password cannot be blank').notEmpty();
+  req.assert('email', 'email is not valid').isEmail();
+  req.assert('password', 'password cannot be blank').notEmpty();
   req.sanitize('email').normalizeEmail({ remove_dots: false });
   const errors = req.validationErrors();
   if (errors) {
@@ -50,8 +51,8 @@ const login = (req, res) => {
 
 
 const signup = (req, res) => {
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password must be at least 4 characters long').len(4);
+  req.assert('email', 'email is not valid').isEmail();
+  req.assert('password', 'password must be at least 4 characters long').len(4);
   req.sanitize('email').normalizeEmail({ remove_dots: false });
   const errors = req.validationErrors();
   if (errors) {
@@ -65,6 +66,7 @@ const signup = (req, res) => {
     profile: {
       email: req.body.email,
     },
+    role: 'user',
   });
 
   try {
@@ -86,7 +88,42 @@ const signup = (req, res) => {
   }
 };
 
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.getUsers();
+
+    return res.send(successObject('', { data: { users } }));
+  } catch (err) {
+    return res.status(500).send(errorObject(ERROR_SOMETHING_BAD_HAPPEND, 'Something bad happened :(', err));
+  }
+};
+
+const updateUsersRole = async (req, res) => {
+  req.assert('users', 'users object is missing').notEmpty();
+  const errors = req.validationErrors();
+  if (errors) {
+    return res.status(400).send(errorObject(ERROR_VALIDATION_FAILED, 'Validation Failed', errors));
+  }
+
+  try {
+    let users = req.body.users;
+
+    const updates = [];
+    for (const user of users) {
+      updates.push(User.updateUserRole(user.id, user.role));
+    }
+    await Promise.all(updates);
+
+    users = await User.getUsers();
+    return res.send(successObject('', { data: { users } }));
+  } catch (err) {
+    return res.status(500).send(errorObject(ERROR_SOMETHING_BAD_HAPPEND, 'Something bad happened :(', err));
+  }
+};
+
 module.exports = {
   login,
   signup,
+  getUsers,
+  updateUsersRole,
 };

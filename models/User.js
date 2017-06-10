@@ -2,10 +2,10 @@ const bcrypt = require('bcrypt-nodejs');
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  id: { type: String, unique: true },
-  email: { type: String, unique: true },
+  id: { type: String, index: { unique: true } },
+  email: { type: String, index: { unique: true } },
   password: String,
-  numberOfCaloriesPerDay: Number,
+  role: { type: String, default: 'user' },
 }, { timestamps: true });
 
 
@@ -38,5 +38,23 @@ userSchema.methods.comparePassword = function comparePassword(candidatePassword,
   });
 };
 
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+userSchema.statics.getUsers = async function () {
+  const users = await this.find().exec();
+  if (!users) {
+    return false;
+  }
+
+  return users.map(user => ({
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  }));
+};
+
+userSchema.statics.updateUserRole = async function (userId, role) {
+  await this.findOneAndUpdate({ id: userId }, { role });
+
+  return true;
+};
+
+module.exports = mongoose.model('User', userSchema);

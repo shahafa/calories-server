@@ -9,6 +9,7 @@
     "consistent-return": "off",
     "no-shadow": "off",
     "func-names": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "no-restricted-syntax": "off",
   }  
 }
