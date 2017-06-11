@@ -22,7 +22,8 @@ const add = async (req, res) => {
 
   try {
     const userId = req.user.user.id;
-    const meal = Object.assign({ userId }, req.body.meal);
+    const userEmail = req.user.user.email;
+    const meal = Object.assign({ userId, userEmail }, req.body.meal);
     await Meal.add(meal);
 
     const meals = await Meal.getMeals(userId);

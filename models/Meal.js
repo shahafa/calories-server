@@ -1,15 +1,19 @@
 const mongoose = require('mongoose');
+const User = require('./User');
 
 const MealSchema = new mongoose.Schema({
   id: { type: String, index: { unique: true } },
   userId: { type: String, index: true },
+  userEmail: { type: String, index: true },
   date: Date,
   meal: String,
   calories: Number,
 }, { timestamps: true });
 
 MealSchema.statics.getMeals = async function (userId) {
-  const meals = await this.find({ userId }).exec();
+  const isAdmin = await User.isAdmin(userId);
+
+  const meals = await this.find(isAdmin ? {} : { userId }).exec();
   if (!meals) {
     return false;
   }
@@ -23,7 +27,9 @@ MealSchema.statics.add = async function (meal) {
 };
 
 MealSchema.statics.delete = async function (userId, mealId) {
-  const meal = await this.findOne({ userId, id: mealId }).exec();
+  const isAdmin = await User.isAdmin(userId);
+
+  const meal = await this.findOne(isAdmin ? { id: mealId } : { userId, id: mealId }).exec();
   if (!meal) {
     return false;
   }
@@ -33,7 +39,9 @@ MealSchema.statics.delete = async function (userId, mealId) {
 };
 
 MealSchema.statics.edit = async function (userId, meal) {
-  await this.findOneAndUpdate({ userId, id: meal.id }, meal);
+  const isAdmin = await User.isAdmin(userId);
+
+  await this.findOneAndUpdate(isAdmin ? { id: meal.id } : { userId, id: meal.id }, meal);
 
   return true;
 };

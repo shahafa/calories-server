@@ -16,7 +16,6 @@ const isUserManager = (req, res, next) => {
   next();
 };
 
-
 function routesConfig(app) {
   app.post('/login', usersController.login);
   app.post('/signup', usersController.signup);

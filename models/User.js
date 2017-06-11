@@ -67,4 +67,14 @@ UserSchema.statics.delete = async function (userId) {
   return true;
 };
 
+UserSchema.statics.isAdmin = async function (userId) {
+  const user = await this.findOne({ id: userId }).exec();
+  if (!user) {
+    return false;
+  }
+
+  return user.role === 'admin';
+};
+
+
 module.exports = mongoose.model('User', UserSchema);
