@@ -52,7 +52,7 @@ const login = (req, res) => {
 
 const signup = (req, res) => {
   req.assert('email', 'email is not valid').isEmail();
-  req.assert('password', 'password must be at least 4 characters long').len(4);
+  req.assert('password', 'password must be at least 8 characters long').len(8);
   req.sanitize('email').normalizeEmail({ remove_dots: false });
   const errors = req.validationErrors();
   if (errors) {
