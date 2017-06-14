@@ -48,7 +48,7 @@ function expressConfig(app) {
   // It can be removed safely
   app.disable('x-powered-by');
 
-  app.use(express.static(path.join(__dirname, '../build')));
+  app.use(express.static(path.join(__dirname, '/../build'), { maxAge: 31557600000 }));
 
   // Monitors express at /status
   app.use(expressStatusMonitor());
