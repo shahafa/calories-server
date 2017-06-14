@@ -1,3 +1,5 @@
+const express = require('express');
+const path = require('path');
 const compression = require('compression');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
@@ -45,6 +47,8 @@ function expressConfig(app) {
   // Keeping it makes it easier for an attacker to build the site's profile
   // It can be removed safely
   app.disable('x-powered-by');
+
+  app.use(express.static(path.join(__dirname, 'build')));
 
   // Monitors express at /status
   app.use(expressStatusMonitor());

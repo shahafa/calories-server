@@ -1,5 +1,6 @@
 const chalk = require('chalk');
 const jwt = require('express-jwt');
+const path = require('path');
 const { errorObject } = require('../lib/util');
 const { ERROR_NO_PERMISSION } = require('../consts');
 const usersController = require('../controllers/users');
@@ -31,6 +32,8 @@ function routesConfig(app) {
 
   app.get('/v1/settings', authenticate, settingsController.getSettings);
   app.put('/v1/settings', authenticate, settingsController.setSettings);
+
+  app.get('/*', (req, res) => { res.sendFile(path.join(__dirname, 'build', 'index.html')); });
 
   console.log('%s Routes configured successfully', chalk.green('✓'));
 }
