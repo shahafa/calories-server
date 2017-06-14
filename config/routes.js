@@ -33,7 +33,7 @@ function routesConfig(app) {
   app.get('/v1/settings', authenticate, settingsController.getSettings);
   app.put('/v1/settings', authenticate, settingsController.setSettings);
 
-  app.use('/', (req, res) => res.sendFile(path.join(__dirname, '/../build/index.html')));
+  app.use('*', (req, res) => res.sendFile(path.join(__dirname, '/../build/index.html')));
 
   console.log('%s Routes configured successfully', chalk.green('✓'));
 }
