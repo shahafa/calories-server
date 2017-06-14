@@ -17,20 +17,20 @@ const isUserManager = (req, res, next) => {
 };
 
 function routesConfig(app) {
-  app.post('/login', usersController.login);
-  app.post('/signup', usersController.signup);
+  app.post('/v1/login', usersController.login);
+  app.post('/v1/signup', usersController.signup);
 
-  app.get('/users', authenticate, isUserManager, usersController.getUsers);
-  app.put('/users', authenticate, isUserManager, usersController.updateUsersRole);
-  app.delete('/users/:id', authenticate, isUserManager, usersController.deleteUser);
+  app.get('/v1/users', authenticate, isUserManager, usersController.getUsers);
+  app.put('/v1/users', authenticate, isUserManager, usersController.updateUsersRole);
+  app.delete('/v1/users/:id', authenticate, isUserManager, usersController.deleteUser);
 
-  app.get('/meals', authenticate, mealsController.getAll);
-  app.post('/meals', authenticate, mealsController.add);
-  app.put('/meals/:id', authenticate, mealsController.edit);
-  app.delete('/meals/:id', authenticate, mealsController.deleteMeal);
+  app.get('/v1/meals', authenticate, mealsController.getAll);
+  app.post('/v1/meals', authenticate, mealsController.add);
+  app.put('/v1/meals/:id', authenticate, mealsController.edit);
+  app.delete('/v1/meals/:id', authenticate, mealsController.deleteMeal);
 
-  app.get('/settings', authenticate, settingsController.getSettings);
-  app.put('/settings', authenticate, settingsController.setSettings);
+  app.get('/v1/settings', authenticate, settingsController.getSettings);
+  app.put('/v1/settings', authenticate, settingsController.setSettings);
 
   console.log('%s Routes configured successfully', chalk.green('✓'));
 }

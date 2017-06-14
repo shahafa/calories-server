@@ -2,7 +2,8 @@
   "extends": "airbnb",
   "env": {
     "node": true,
-    "es6": true
+    "es6": true,
+    "jest": true
   },
   "rules": {
     "no-console": "off",
@@ -10,6 +11,6 @@
     "no-shadow": "off",
     "func-names": "off",
     "no-param-reassign": "off",
-    "no-restricted-syntax": "off",
+    "no-restricted-syntax": "off"
   }  
 }
